@@ -11,11 +11,39 @@ export class RegisterService implements IRegisterService {
 
     async insert(register: Register): Promise<void> {
         const db = await openDb();
-        const { name, description, value, date, registerType} = register;
+        const { name, description, value, date, registerType } = register;
         await db.run(
             'INSERT INTO registers (name, description, value, date, registerType) VALUES (?, ?, ?, ?, ?)',
             [name, description, value, date, registerType]
         );
+    }
+
+    async update(register: Register, id: number): Promise<void> {
+        const db = await openDb();
+        const { name, description, value, date, registerType } = register;
+
+        const existing = await db.get('SELECT id FROM registers WHERE id = ?', [id]);
+        if (!existing) {
+            throw new Error(`Registro com ID ${id} não encontrado.`);
+        }
+
+        await db.run(
+            `UPDATE registers
+             SET name = ?, description = ?, value = ?, date = ?, registerType = ?
+             WHERE id = ?`,
+            [name, description, value, date, registerType, id]
+        );
+    }
+
+    async delete(id: number): Promise<void> {
+        const db = await openDb();
+
+        const existing = await db.get('SELECT id FROM registers WHERE id = ?', [id]);
+        if (!existing) {
+            throw new Error(`Registro com ID ${id} não encontrado.`);
+        }
+        
+        await db.run(`DELETE FROM registers WHERE id = ?`, [id]);
     }
 
     async calculateTotal(start: string, end: string): Promise<{ totalInputs: number; totalOutputs: number; balance: number; }> {

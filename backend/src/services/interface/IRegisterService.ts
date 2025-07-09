@@ -8,4 +8,6 @@ export interface IRegisterService {
         totalOutputs: number;
         balance: number;
     }>;
+    update(register: Register, id: number): Promise<void>;
+    delete(id: number): Promise<void>;
 }
