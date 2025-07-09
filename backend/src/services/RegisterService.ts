@@ -42,7 +42,7 @@ export class RegisterService implements IRegisterService {
         if (!existing) {
             throw new Error(`Registro com ID ${id} não encontrado.`);
         }
-        
+
         await db.run(`DELETE FROM registers WHERE id = ?`, [id]);
     }
 
@@ -66,5 +66,4 @@ export class RegisterService implements IRegisterService {
             balance: totalInputs - totalOutputs
         };
     }
-
 }
