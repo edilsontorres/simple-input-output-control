@@ -1,4 +1,5 @@
 export interface Register {
+    id?: string,
     name: string,
     description: string,
     value: number,

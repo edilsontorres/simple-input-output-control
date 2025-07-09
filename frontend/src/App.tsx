@@ -2,11 +2,13 @@ import { listRegisters, caculateTotais } from "./api/Registers";
 import { useEffect, useState } from "react";
 import { RegisterForm } from "./components/RegisterForm";
 import type { Register, Totais } from "./types/Registers";
-import { FilterPeriod } from "./components/FilterPeriod";
+import { RegisterList } from "./components/RegisterList";
+import { ResumeFilterPeriod } from "./components/ResumeFilterPeriod";
 
 export const App = () => {
   const [registers, setRegister] = useState<Register[]>([]);
   const [totais, setTotais] = useState<Totais | null>(null);
+  const [showFilter, setShowFilter] = useState(false);
 
   const getToday = (): string => {
     const today = new Date();
@@ -32,7 +34,6 @@ export const App = () => {
 
 
 
-
   return (
     <>
       <div>
@@ -43,30 +44,7 @@ export const App = () => {
         <hr />
 
         <h2>Registros de hoje</h2>
-        {registers.length === 0 ? (
-          <p>Nenhum registro para hoje ainda.</p>
-        ) : (
-          <table border={1}>
-            <thead>
-              <tr>
-                <th>Data</th>
-                <th>Descrição</th>
-                <th>Valor</th>
-                <th>Tipo</th>
-              </tr>
-            </thead>
-            <tbody>
-              {registers.map((r, i) => (
-                <tr key={i}>
-                  <td>{r.date}</td>
-                  <td>{r.description}</td>
-                  <td>R$ {r.value}</td>
-                  <td>{r.registerType === 'credit' ? 'Entrada' : 'Saída'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+        <RegisterList registers={registers} updateRegisters={loadDataOfToday} />
 
         <h2>Totais do dia</h2>
         {totais && (
@@ -77,7 +55,11 @@ export const App = () => {
           </ul>
         )}
 
-        <FilterPeriod />
+        <button onClick={() => setShowFilter(!showFilter)}>
+          {showFilter ? 'Fechar Filtro por Período' : 'Filtro por Período'}
+        </button>
+
+        {showFilter && <ResumeFilterPeriod />}
       </div>
     </>
   );

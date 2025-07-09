@@ -1,45 +1,38 @@
-import { useState } from 'react';
-import { listRegisters, caculateTotais } from '../api/Registers';
-import type { Register, Totais } from '../types/Registers';
+import { useEffect, useState } from 'react';
+import { listRegisters } from '../api/Registers';
+import type { Register } from '../types/Registers';
 
-export const FilterPeriod = () => {
-    const [start, setStart] = useState('');
-    const [end, setEnd] = useState('');
+interface Props {
+    start: string;
+    end: string;
+}
+
+export const DetailedFilterPeriod = ({ start, end }: Props) => {
     const [inputs, setInputs] = useState<Register[]>([]);
     const [outputs, setOutputs] = useState<Register[]>([]);
-    const [totais, setTotais] = useState<Totais | null>(null);
 
-    const handleSearch = async () => {
-        if (!start || !end) return alert('Selecione datas válidas');
+    useEffect(() => {
 
-        const allRegisters = await listRegisters();
+        const handleSearch = async () => {
+            if (!start || !end) return alert('Selecione datas válidas');
 
-        const filtered = allRegisters.filter(r => r.date >= start && r.date <= end);
-        setInputs(filtered.filter(r => r.registerType === 'credit'));
-        setOutputs(filtered.filter(r => r.registerType === 'debit'));
+            const allRegisters = await listRegisters();
 
-        const totalsPeriod = await caculateTotais(start, end);
-        setTotais(totalsPeriod);
-    };
+            const filtered = allRegisters.filter(r => r.date >= start && r.date <= end);
+            setInputs(filtered.filter(r => r.registerType === 'credit'));
+            setOutputs(filtered.filter(r => r.registerType === 'debit'));
+
+        };
+
+        handleSearch();
+
+    }, [start, end]);
 
     const formatToReal = (v: number) =>
         new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);
 
     return (
         <div>
-            <h2>Filtro por Período</h2>
-            <div>
-                <label>
-                    Início:
-                    <input type="date" value={start} onChange={e => setStart(e.target.value)} />
-                </label>
-                <label>
-                    Fim:
-                    <input type="date" value={end} onChange={e => setEnd(e.target.value)} />
-                </label>
-                <button onClick={handleSearch}>Buscar</button>
-            </div>
-
             {inputs.length > 0 && (
                 <div>
                     <h3>Entradas</h3>
@@ -85,17 +78,6 @@ export const FilterPeriod = () => {
                             ))}
                         </tbody>
                     </table>
-                </div>
-
-            )}
-            {totais && (
-                <div>
-                    <h3>Total do Período</h3>
-                    <ul>
-                        <li>Entradas: {formatToReal(totais.totalInputs)}</li>
-                        <li>Saídas: {formatToReal(totais.totalOutputs)}</li>
-                        <li>Balanço: {formatToReal(totais.balance)}</li>
-                    </ul>
                 </div>
             )}
         </div>
