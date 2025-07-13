@@ -4,7 +4,7 @@ export interface Register {
     description: string,
     value: number,
     date: string,
-    registerType: 'credit' | 'debit';
+    registerType: 'credit' | 'debit' | '';
 }
 
 export interface Totais {

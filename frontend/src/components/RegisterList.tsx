@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { deleteRegister, updateRegister } from '../api/Registers';
 import type { Register } from '../types/Registers';
+import { formatData, formatToReal } from '../utils/FormatValue';
 
 
 interface Props {
@@ -52,93 +53,102 @@ export const RegisterList = ({ registers, updateRegisters }: Props) => {
 
 
     if (registers.length === 0) {
-        return <p>Nenhum registro para hoje ainda.</p>;
+        return <div className='flex flex-col items-start w-full font-patrick'>
+            <h2 className='text-3xl font-semibold'>Registros de hoje:</h2>
+            <p>Nenhum registro pra hoje</p>
+        </div>
     }
 
     return (
-        <div>
-            {erro && <p style={{ color: 'red' }}>{erro}</p>}
+        <>
+            <div className="w-full mt-6">
+                {erro && <p className="text-red-500 mb-2">{erro}</p>}
 
-            <table border={1}>
-                <thead>
-                    <tr>
-                        <th>Data</th>
-                        <th>Nome</th>
-                        <th>Descrição</th>
-                        <th>Valor</th>
-                        <th>Tipo</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {registers.map((r) => (
-                        <tr key={r.id}>
-                            {editId === r.id ? (
+                <h2 className="font-patrick text-3xl font-semibold mb-2">Registros de hoje:</h2>
+
+                {/* Cabeçalho */}
+                <div className="grid grid-cols-12 bg-pink-200 text-pink-900 font-patrick text-xl font-semibold py-2 px-4 rounded-t-md">
+                    <span className='col-span-2'>Data</span>
+                    <span className='col-span-2'>Nome</span>
+                    <span className='col-span-3'>Descrição</span>
+                    <span className='col-span-1'>R$</span>
+                    <span className='col-span-2'>Tipo</span>
+                    <span className="text-center col-span-2">Ações</span>
+                </div>
+
+                {/* Lista de registros */}
+                {registers.map((r) => {
+                    const isEditing = editId === r.id;
+
+                    return (
+                        <div
+                            key={r.id}
+                            className="grid grid-cols-12 items-center px-4 py-2 border-b border-pink-200 bg-pink-50 text-sm"
+                        >
+                            {isEditing ? (
                                 <>
-                                    <td>
-                                        <input
-                                            type="date"
-                                            name="date"
-                                            value={registerEdited.date}
-                                            onChange={handleChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        <input
-                                            type="text"
-                                            name="name"
-                                            value={registerEdited.name}
-                                            onChange={handleChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        <input
-                                            type="text"
-                                            name="description"
-                                            value={registerEdited.description}
-                                            onChange={handleChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        <input
-                                            type="number"
-                                            name="value"
-                                            value={registerEdited.value}
-                                            onChange={handleChange}
-                                        />
-                                    </td>
-                                    <td>
-                                        <select
-                                            name="registerType"
-                                            value={registerEdited.registerType}
-                                            onChange={handleChange}
-                                        >
-                                            <option value="credit">Entrada</option>
-                                            <option value="debit">Saída</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <button onClick={saveEdition}>Salvar</button>{' '}
-                                        <button onClick={cancelEdition}>Cancelar</button>
-                                    </td>
+                                    <input
+                                        type="date"
+                                        name="date"
+                                        value={registerEdited.date}
+                                        onChange={handleChange}
+                                        className="border-b border-pink-300 outline-none px-1 h-8 col-span-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={registerEdited.name}
+                                        onChange={handleChange}
+                                        className="border-b border-pink-300 outline-none px-1 h-8 col-span-2"
+                                    />
+                                    <input
+                                        type="text"
+                                        name="description"
+                                        value={registerEdited.description}
+                                        onChange={handleChange}
+                                        className="border-b border-pink-300 outline-none px-1 h-8 col-span-3"
+                                    />
+                                    <input
+                                        type="number"
+                                        name="value"
+                                        value={registerEdited.value}
+                                        onChange={handleChange}
+                                        className="border-b border-pink-300 outline-none px-1 h-8 col-span-1"
+                                    />
+                                    <select
+                                        name="registerType"
+                                        value={registerEdited.registerType}
+                                        onChange={handleChange}
+                                        className="border-b border-pink-300 outline-none px-1 h-8 col-span-2"
+                                    >
+                                        <option value="credit">Entrada</option>
+                                        <option value="debit">Saída</option>
+                                    </select>
+                                    <div className="flex justify-center gap-2 col-span-2">
+                                        <button onClick={saveEdition} className="text-blue-600 hover:underline text-sm cursor-pointer">Salvar</button>
+                                        <button onClick={cancelEdition} className="text-gray-500 hover:underline text-sm cursor-pointer">Cancelar</button>
+                                    </div>
                                 </>
                             ) : (
                                 <>
-                                    <td>{r.date}</td>
-                                    <td>{r.name}</td>
-                                    <td>{r.description}</td>
-                                    <td>R$ {r.value}</td>
-                                    <td>{r.registerType === 'credit' ? 'Entrada' : 'Saída'}</td>
-                                    <td>
-                                        <button onClick={() => startEditing(r)}>Atualizar</button>{' '}
-                                        <button onClick={() => handleDelete(r.id!)}>Deletar</button>
-                                    </td>
+                                    <span  className='col-span-2'>{formatData(r.date)}</span>
+                                    <span  className='col-span-2'>{r.name}</span>
+                                    <span className='col-span-3'>{r.description}</span>
+                                    <span  className='col-span-1'>{formatToReal(r.value)}</span>
+                                    <span className={r.registerType === 'credit' ? 'text-blue-600 col-span-2' : 'text-red-600 col-span-2'}>
+                                        {r.registerType === 'credit' ? 'Entrada' : 'Saída'}
+                                    </span>
+                                    <div className="flex justify-center gap-2 col-span-2">
+                                        <button onClick={() => startEditing(r)} className="text-blue-600 hover:underline text-sm cursor-pointer">Editar</button>
+                                        <button onClick={() => handleDelete(r.id!)} className="text-red-600 hover:underline text-sm cursor-pointer">Deletar</button>
+                                    </div>
                                 </>
                             )}
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
+                        </div>
+                    );
+                })}
+            </div>
+        </>
+
     );
 }

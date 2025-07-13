@@ -4,6 +4,7 @@ import { RegisterForm } from "./components/RegisterForm";
 import type { Register, Totais } from "./types/Registers";
 import { RegisterList } from "./components/RegisterList";
 import { ResumeFilterPeriod } from "./components/ResumeFilterPeriod";
+import { formatToReal } from "./utils/FormatValue";
 
 export const App = () => {
   const [registers, setRegister] = useState<Register[]>([]);
@@ -36,30 +37,55 @@ export const App = () => {
 
   return (
     <>
-      <div>
-        <h1>Controle Financeiro</h1>
 
-        <RegisterForm onSubmitSuccess={loadDataOfToday} />
+      <div className="flex flex-col justify-center items-center">
+        <div className="mb-3 mt-1.5">
+          <h1 className="font-patrick text-6xl">Controle Financeiro</h1>
+        </div>
+        <div className="w-1/2">
+          <RegisterForm onSubmitSuccess={loadDataOfToday} />
+        </div>
 
-        <hr />
+        <div className="w-1/2 mb-3">
+          <RegisterList registers={registers} updateRegisters={loadDataOfToday} />
+        </div>
 
-        <h2>Registros de hoje</h2>
-        <RegisterList registers={registers} updateRegisters={loadDataOfToday} />
 
-        <h2>Totais do dia</h2>
-        {totais && (
-          <ul>
-            <li>Entradas: R$ {totais.totalInputs}</li>
-            <li>Saídas: R$ {totais.totalOutputs}</li>
-            <li>Balanço: R$ {totais.balance}</li>
-          </ul>
-        )}
+        <div className="w-1/2 mb-3 font-patrick">
+          {totais && (
+            <>
+              <h2 className="font-patrick text-3xl text-center font-semibold mb-2">Totais do dia:</h2>
+              <ul className="text-xl bg-pink-50 flex justify-between p-3 rounded-t-md">
+                <li className="font-semibold">
+                  <span>Entradas: </span>
+                  <span className="text-[#60d394]">{formatToReal(totais.totalInputs)}</span>
+                </li>
+                <li className="font-semibold">
+                  <span className="font-semibold">Saídas: </span>
+                  <span className="text-red-400">{formatToReal(totais.totalOutputs)}</span>
+                </li>
+                <li className="font-semibold">
+                  <span>Balanço: </span>{' '}
+                  <span className={totais.balance >= 0 ? 'text-blue-600' : 'text-red-600'}>
+                    {formatToReal(totais.totalInputs)}
+                  </span>
+                </li>
+              </ul>
+            </>
+          )}
+        </div>
 
-        <button onClick={() => setShowFilter(!showFilter)}>
-          {showFilter ? 'Fechar Filtro por Período' : 'Filtro por Período'}
-        </button>
+        <div className="w-1/2 mt-3 font-patrick font-semibold text-xl">
+          <button
+            className="flex p-2 bg-pink-50 hover:bg-pink-100 hover:shadow-inner rounded-t-md cursor-pointer transition-colors duration-200"
+            onClick={() => setShowFilter(!showFilter)}>
+            {showFilter ? 'Fechar Filtro por Período' : 'Filtro por Período'}
+          </button>
+        </div>
+        <div className="w-1/2 mt-3">
+          {showFilter && <ResumeFilterPeriod />}
+        </div>
 
-        {showFilter && <ResumeFilterPeriod />}
       </div>
     </>
   );

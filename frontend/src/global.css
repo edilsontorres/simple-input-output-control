@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+body
+{
+  background-color: #E8E8E4;
+}
+
+@font-face {
+  font-family: PatrickHandSC;
+  src: url("./fonts/Patrick_Hand_SC/PatrickHandSC-Regular.ttf") format("opentype");
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-patrick: PatrickHandSC, "sans-serif";
+}
