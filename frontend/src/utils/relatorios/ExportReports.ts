@@ -3,7 +3,7 @@ import autoTable from 'jspdf-autotable';
 import { formatData, formatToReal } from '../FormatValue';
 import type { Register, Totais } from '../../types/Registers';
 
-export function exportReportsPDF(registers: Register[], totais: Totais, start: string, end: string) {
+export const exportReportsPDF = (registers: Register[], totais: Totais, start: string, end: string) => {
     const doc = new jsPDF();
 
     const labelX = 14;

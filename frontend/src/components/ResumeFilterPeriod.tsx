@@ -1,22 +1,29 @@
 import { useEffect, useState } from 'react';
-import { caculateTotais } from '../api/Registers';
+import { caculateTotais, listRegisters } from '../api/Registers';
 import type { Totais } from '../types/Registers';
 import { formatData, formatToReal } from '../utils/FormatValue';
-import { exportReportsPDF } from '../utils/relatorios/ExportRelatorio';
-import type { Register } from '../types/Registers';
+import { exportReportsPDF } from '../utils/relatorios/ExportReports';
 import { exportInputsReportsPDF } from '../utils/relatorios/ExportInputsReportsPDF';
 import { exportOutputsReportsPDF } from '../utils/relatorios/ExportOutputsReportsPDF';
+import type { Register } from '../types/Registers';
+
+
 
 export const ResumeFilterPeriod = () => {
     const [start, setStart] = useState('');
     const [end, setEnd] = useState('');
     const [totais, setTotais] = useState<Totais>({ totalInputs: 0, totalOutputs: 0, balance: 0 });
-    const [registers] = useState<Register[]>([]);
+    const [registers, setRegisters] = useState<Register[]>([]);
     const [relatorioTipo, setRelatorioTipo] = useState<'geral' | 'entradas' | 'saidas' | 'separado'>('geral');
+    const [visibleResult, setVisibleResult] = useState(false);
+
 
     const handleSearch = async () => {
         const totalsPeriod = await caculateTotais(start, end);
+        const totalsRegisters = await listRegisters();
         setTotais(totalsPeriod);
+        setRegisters(totalsRegisters);
+        setVisibleResult(true);
     };
 
     useEffect(() => {
@@ -81,7 +88,7 @@ export const ResumeFilterPeriod = () => {
                 </div>
             </div>
 
-            {totais && (
+            {visibleResult && (
                 <>
                     <h2 className="font-patrick text-3xl text-center font-semibold mb-2">Resumo</h2>
                     <p className='text-center'> {formatData(start)} à {formatData(end)}</p>
