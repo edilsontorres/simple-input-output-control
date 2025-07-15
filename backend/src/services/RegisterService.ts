@@ -6,7 +6,7 @@ export class RegisterService implements IRegisterService {
 
     async list(): Promise<Register[]> {
         const db = await openDb();
-        return db.all<Register[]>('SELECT * FROM registers ORDER BY date DESC');
+        return db.all<Register[]>('SELECT * FROM registers ORDER BY date ASC');
     }
 
     async insert(register: Register): Promise<void> {
