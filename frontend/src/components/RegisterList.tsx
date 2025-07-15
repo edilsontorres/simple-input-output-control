@@ -76,77 +76,83 @@ export const RegisterList = ({ registers, updateRegisters }: Props) => {
                     <span className="text-center col-span-2">Ações</span>
                 </div>
 
-                {/* Lista de registros */}
-                {registers.map((r) => {
-                    const isEditing = editId === r.id;
+                <div className="max-h-[200px] overflow-y-auto">
 
-                    return (
-                        <div
-                            key={r.id}
-                            className="grid grid-cols-12 items-center px-4 py-2 border-b border-pink-200 bg-pink-50 text-sm"
-                        >
-                            {isEditing ? (
-                                <>
-                                    <input
-                                        type="date"
-                                        name="date"
-                                        value={registerEdited.date}
-                                        onChange={handleChange}
-                                        className="border-b border-pink-300 outline-none px-1 h-8 col-span-2"
-                                    />
-                                    <input
-                                        type="text"
-                                        name="name"
-                                        value={registerEdited.name}
-                                        onChange={handleChange}
-                                        className="border-b border-pink-300 outline-none px-1 h-8 col-span-2"
-                                    />
-                                    <input
-                                        type="text"
-                                        name="description"
-                                        value={registerEdited.description}
-                                        onChange={handleChange}
-                                        className="border-b border-pink-300 outline-none px-1 h-8 col-span-3"
-                                    />
-                                    <input
-                                        type="number"
-                                        name="value"
-                                        value={registerEdited.value}
-                                        onChange={handleChange}
-                                        className="border-b border-pink-300 outline-none px-1 h-8 col-span-1"
-                                    />
-                                    <select
-                                        name="registerType"
-                                        value={registerEdited.registerType}
-                                        onChange={handleChange}
-                                        className="border-b border-pink-300 outline-none px-1 h-8 col-span-2"
-                                    >
-                                        <option value="credit">Entrada</option>
-                                        <option value="debit">Saída</option>
-                                    </select>
-                                    <div className="flex justify-center gap-2 col-span-2">
-                                        <button onClick={saveEdition} className="text-blue-600 hover:underline text-sm cursor-pointer">Salvar</button>
-                                        <button onClick={cancelEdition} className="text-gray-500 hover:underline text-sm cursor-pointer">Cancelar</button>
-                                    </div>
-                                </>
-                            ) : (
-                                <>
-                                    <span  className='col-span-2'>{formatData(r.date)}</span>
-                                    <span  className='col-span-2'>{r.name}</span>
-                                    <span className='col-span-3'>{r.description}</span>
-                                    <span  className='col-span-1'>{formatToReal(r.value)}</span>
-                                    <span className={r.registerType === 'credit' ? 'text-blue-600 col-span-2' : 'text-red-600 col-span-2'}>
-                                        {r.registerType === 'credit' ? 'Entrada' : 'Saída'}
-                                    </span>
-                                    <div className="flex justify-center gap-2 col-span-2">
-                                        <button onClick={() => startEditing(r)} className="text-blue-600 hover:underline text-sm cursor-pointer">Editar</button>
-                                        <button onClick={() => handleDelete(r.id!)} className="text-red-600 hover:underline text-sm cursor-pointer">Deletar</button>
-                                    </div>
-                                </>
-                            )}
-                        </div>
-                    );
-                })}
+                    {/* Lista de registros */}
+                    {registers.map((r) => {
+                        const isEditing = editId === r.id;
+
+                        return (
+
+                            <div
+                                key={r.id}
+                                className="grid grid-cols-12 items-center px-4 py-2 border-b border-pink-200 bg-pink-50 text-sm"
+                            >
+                                {isEditing ? (
+                                    <>
+                                        <input
+                                            type="date"
+                                            name="date"
+                                            value={registerEdited.date}
+                                            onChange={handleChange}
+                                            className="border-b border-pink-300 outline-none px-1 h-8 col-span-2"
+                                        />
+                                        <input
+                                            type="text"
+                                            name="name"
+                                            value={registerEdited.name}
+                                            onChange={handleChange}
+                                            className="border-b border-pink-300 outline-none px-1 h-8 col-span-2"
+                                        />
+                                        <input
+                                            type="text"
+                                            name="description"
+                                            value={registerEdited.description}
+                                            onChange={handleChange}
+                                            className="border-b border-pink-300 outline-none px-1 h-8 col-span-3"
+                                        />
+                                        <input
+                                            type="number"
+                                            name="value"
+                                            value={registerEdited.value}
+                                            onChange={handleChange}
+                                            className="border-b border-pink-300 outline-none px-1 h-8 col-span-1"
+                                        />
+                                        <select
+                                            name="registerType"
+                                            value={registerEdited.registerType}
+                                            onChange={handleChange}
+                                            className="border-b border-pink-300 outline-none px-1 h-8 col-span-2"
+                                        >
+                                            <option value="credit">Entrada</option>
+                                            <option value="debit">Saída</option>
+                                        </select>
+                                        <div className="flex justify-center gap-2 col-span-2">
+                                            <button onClick={saveEdition} className="text-blue-600 hover:underline text-sm cursor-pointer">Salvar</button>
+                                            <button onClick={cancelEdition} className="text-gray-500 hover:underline text-sm cursor-pointer">Cancelar</button>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <span className='col-span-2'>{formatData(r.date)}</span>
+                                        <span className='col-span-2'>{r.name}</span>
+                                        <span className='col-span-3'>{r.description}</span>
+                                        <span className='col-span-1'>{formatToReal(r.value)}</span>
+                                        <span className={r.registerType === 'credit' ? 'text-blue-600 col-span-2' : 'text-red-600 col-span-2'}>
+                                            {r.registerType === 'credit' ? 'Entrada' : 'Saída'}
+                                        </span>
+                                        <div className="flex justify-center gap-2 col-span-2">
+                                            <button onClick={() => startEditing(r)} className="text-blue-600 hover:underline text-sm cursor-pointer">Editar</button>
+                                            <button onClick={() => handleDelete(r.id!)} className="text-red-600 hover:underline text-sm cursor-pointer">Deletar</button>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                        );
+                    })}
+
+                </div>
+
             </div>
         </>
 

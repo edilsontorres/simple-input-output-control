@@ -78,7 +78,7 @@ export const ResumeFilterPeriod = () => {
                     </label>
                 </div>
             </div>
-            <div className='flex justify-star mt-2'>
+            <div className='flex justify-star mt-2 mb-3'>
                 <div className='flex p-2 rounded-t-md font-patrick font-semibold bg-pink-50 hover:bg-pink-100 hover:shadow-inner cursor-pointer'>
                     <button
                         className='cursor-pointer'

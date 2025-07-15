@@ -1,5 +1,5 @@
 import { listRegisters, caculateTotais } from "./api/Registers";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { RegisterForm } from "./components/RegisterForm";
 import type { Register, Totais } from "./types/Registers";
 import { RegisterList } from "./components/RegisterList";
@@ -10,6 +10,7 @@ export const App = () => {
   const [registers, setRegister] = useState<Register[]>([]);
   const [totais, setTotais] = useState<Totais | null>(null);
   const [showFilter, setShowFilter] = useState(false);
+  const filterRef = useRef<HTMLDivElement>(null);
 
   const getToday = (): string => {
     const today = new Date();
@@ -30,9 +31,14 @@ export const App = () => {
   }
 
   useEffect(() => {
+  if (showFilter && filterRef.current) {
+    filterRef.current.scrollIntoView({ behavior: 'smooth' });
+  }
+}, [showFilter]);
+
+  useEffect(() => {
     loadDataOfToday();
   }, []);
-
 
 
   return (
@@ -42,16 +48,16 @@ export const App = () => {
         <div className="mb-3 mt-1.5">
           <h1 className="font-patrick text-6xl">Controle Financeiro</h1>
         </div>
-        <div className="w-1/2">
+        <div className="w-11/12">
           <RegisterForm onSubmitSuccess={loadDataOfToday} />
         </div>
 
-        <div className="w-1/2 mb-3">
+        <div className="w-11/12 mb-3">
           <RegisterList registers={registers} updateRegisters={loadDataOfToday} />
         </div>
 
 
-        <div className="w-1/2 mb-3 font-patrick">
+        <div className="w-11/12 mb-3 font-patrick">
           {totais && (
             <>
               <h2 className="font-patrick text-3xl text-center font-semibold mb-2">Totais do dia:</h2>
@@ -67,7 +73,7 @@ export const App = () => {
                 <li className="font-semibold">
                   <span>Balanço: </span>{' '}
                   <span className={totais.balance >= 0 ? 'text-blue-600' : 'text-red-600'}>
-                    {formatToReal(totais.totalInputs)}
+                    {formatToReal(totais.balance)}
                   </span>
                 </li>
               </ul>
@@ -75,14 +81,14 @@ export const App = () => {
           )}
         </div>
 
-        <div className="w-1/2 mt-3 font-patrick font-semibold text-xl">
+        <div className="w-11/12 mt-3 font-patrick font-semibold text-xl">
           <button
             className="flex p-2 bg-pink-50 hover:bg-pink-100 hover:shadow-inner rounded-t-md cursor-pointer transition-colors duration-200"
             onClick={() => setShowFilter(!showFilter)}>
             {showFilter ? 'Fechar Filtro por Período' : 'Filtro por Período'}
           </button>
         </div>
-        <div className="w-1/2 mt-3">
+        <div ref={filterRef} className="w-11/12 mt-3">
           {showFilter && <ResumeFilterPeriod />}
         </div>
 
