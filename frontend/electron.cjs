@@ -9,6 +9,7 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 1000,
     height: 800,
+    icon: path.join(__dirname, 'notebook.ico'),
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,

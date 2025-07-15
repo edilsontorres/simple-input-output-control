@@ -22,7 +22,7 @@ export const App = () => {
     const list = await listRegisters();
     const today = getToday();
 
-    const ofDay = list.filter(r => r.date === today);
+    const ofDay = list.filter(r => r.date === today).reverse();
     setRegister(ofDay);
 
 

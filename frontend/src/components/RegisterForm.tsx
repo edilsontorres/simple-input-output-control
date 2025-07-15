@@ -4,11 +4,12 @@ import { insertRegister } from '../api/Registers';
 
 
 export const RegisterForm = ({ onSubmitSuccess }: { onSubmitSuccess: () => void }) => {
+    const getToday = () => new Date().toISOString().split('T')[0];
     const [form, setForm] = useState<Register>({
         name: '',
         description: '',
         value: 0,
-        date: '',
+        date: getToday(),
         registerType: '',
     });
 
@@ -21,13 +22,13 @@ export const RegisterForm = ({ onSubmitSuccess }: { onSubmitSuccess: () => void 
         e.preventDefault();
 
         await insertRegister(form);
-        setForm({ name: '', description: '', value: 0, date: '', registerType: '' });
+        setForm({ name: '', description: '', value: 0, date: getToday(), registerType: '' });
         onSubmitSuccess();
     };
 
     const handleCancel = async (e: React.FormEvent) => {
         e.preventDefault();
-        setForm({ name: '', description: '', value: 0, date: '', registerType: '' });
+        setForm({ name: '', description: '', value: 0, date: getToday(), registerType: '' });
 
     }
 
