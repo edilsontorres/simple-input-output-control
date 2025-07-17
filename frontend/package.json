@@ -9,9 +9,9 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "electron .",
+    "start": "npm run build-frontend && electron .",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder"
+    "dist": "npm run build-frontend && electron-builder"
   },
   "build": {
     "appId": "com.seunome.inputoutputcontrol",
@@ -22,18 +22,29 @@
       "electron.cjs",
       "notebook.ico"
     ],
-    "extraFiles": [
+    "extraResources": [
       {
         "from": "../backend/dist",
-        "to": "backend",
+        "to": "backend/dist",
         "filter": [
           "**/*"
         ]
+      },
+      {
+        "from": "../backend/node_modules",
+        "to": "backend/node_modules",
+        "filter": [
+          "**/*"
+        ]
+      },
+      {
+        "from": "/home/edilsontorres/.nvm/versions/node/v22.17.0/bin/node",
+        "to": "node/node"
       }
     ],
     "win": {
       "target": "nsis",
-      "icon": "build/icon.ico"
+      "icon": "notebook.ico"
     },
     "nsis": {
       "oneClick": false,
