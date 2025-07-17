@@ -1,16 +1,17 @@
 import { IRegisterService } from "./interface/IRegisterService";
 import { openDb } from "../db/Database";
 import { Register } from "../types/Register";
+const DATABASE_PATH = String(process.env.DATABASE_PATH);
 
 export class RegisterService implements IRegisterService {
 
     async list(): Promise<Register[]> {
-        const db = await openDb();
+        const db = await openDb(DATABASE_PATH);
         return db.all<Register[]>('SELECT * FROM registers ORDER BY date ASC');
     }
 
     async insert(register: Register): Promise<void> {
-        const db = await openDb();
+        const db = await openDb(DATABASE_PATH);
         const { name, description, value, date, registerType } = register;
         await db.run(
             'INSERT INTO registers (name, description, value, date, registerType) VALUES (?, ?, ?, ?, ?)',
@@ -19,7 +20,7 @@ export class RegisterService implements IRegisterService {
     }
 
     async update(register: Register, id: number): Promise<void> {
-        const db = await openDb();
+        const db = await openDb(DATABASE_PATH);
         const { name, description, value, date, registerType } = register;
 
         const existing = await db.get('SELECT id FROM registers WHERE id = ?', [id]);
@@ -36,7 +37,7 @@ export class RegisterService implements IRegisterService {
     }
 
     async delete(id: number): Promise<void> {
-        const db = await openDb();
+        const db = await openDb(DATABASE_PATH);
 
         const existing = await db.get('SELECT id FROM registers WHERE id = ?', [id]);
         if (!existing) {
@@ -47,7 +48,7 @@ export class RegisterService implements IRegisterService {
     }
 
     async calculateTotal(start: string, end: string): Promise<{ totalInputs: number; totalOutputs: number; balance: number; }> {
-        const db = await openDb();
+        const db = await openDb(DATABASE_PATH);
         const inputRow = await db.get<{ total: number }>(
             'SELECT SUM(value) as total FROM registers WHERE registerType = ? AND date BETWEEN ? AND ?',
             ['credit', start, end]);

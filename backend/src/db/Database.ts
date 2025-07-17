@@ -3,15 +3,14 @@ import { open } from 'sqlite';
 import path from 'path';
 
 // Usar 'open' para usar async/await
-export const openDb = async () => {
+export const openDb = async (databasePath: string) => {
     return open({
-        filename: path.resolve(__dirname, '../../data/database.sqlite'),
+        filename: databasePath,
         driver: sqlite3.Database
     });
 }
-
-export const initDb = async () => {
-    const db = await openDb();
+export const initDb = async (databasePath: string) => {
+    const db = await openDb(databasePath);
     await db.exec(`
     CREATE TABLE IF NOT EXISTS registers (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
