@@ -3,7 +3,6 @@ import { deleteRegister, updateRegister } from '../api/Registers';
 import type { Register } from '../types/Registers';
 import { formatData, formatToReal } from '../utils/FormatValue';
 
-
 interface Props {
     registers: Register[];
     updateRegisters: () => void;
@@ -50,8 +49,6 @@ export const RegisterList = ({ registers, updateRegisters }: Props) => {
         setRegisterEdited((prev) => ({ ...prev, [name]: name === 'value' ? Number(value) : value }));
     };
 
-
-
     if (registers.length === 0) {
         return <div className='flex flex-col items-start w-full font-patrick'>
             <h2 className='text-3xl font-semibold'>Registros de hoje:</h2>
@@ -63,10 +60,8 @@ export const RegisterList = ({ registers, updateRegisters }: Props) => {
         <>
             <div className="w-full mt-6">
                 {erro && <p className="text-red-500 mb-2">{erro}</p>}
-
                 <h2 className="font-patrick text-3xl font-semibold mb-2">Registros de hoje:</h2>
 
-                {/* Cabeçalho */}
                 <div className="grid grid-cols-12 bg-pink-200 text-pink-900 font-patrick text-xl font-semibold py-2 px-4 rounded-t-md">
                     <span className='col-span-2'>Data</span>
                     <span className='col-span-2'>Nome</span>
@@ -77,8 +72,6 @@ export const RegisterList = ({ registers, updateRegisters }: Props) => {
                 </div>
 
                 <div className="max-h-[200px] overflow-y-auto">
-
-                    {/* Lista de registros */}
                     {registers.map((r) => {
                         const isEditing = editId === r.id;
 
@@ -150,9 +143,7 @@ export const RegisterList = ({ registers, updateRegisters }: Props) => {
                             </div>
                         );
                     })}
-
                 </div>
-
             </div>
         </>
 

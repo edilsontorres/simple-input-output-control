@@ -1,6 +1,7 @@
 import { IRegisterService } from "./interface/IRegisterService";
 import { openDb } from "../db/Database";
 import { Register } from "../types/Register";
+
 const DATABASE_PATH = String(process.env.DATABASE_PATH);
 
 export class RegisterService implements IRegisterService {

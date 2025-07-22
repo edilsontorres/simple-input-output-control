@@ -1,8 +1,6 @@
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
-import path from 'path';
 
-// Usar 'open' para usar async/await
 export const openDb = async (databasePath: string) => {
     return open({
         filename: databasePath,

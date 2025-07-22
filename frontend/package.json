@@ -9,9 +9,9 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "npm run build-frontend && electron .",
+    "start": "electron .",
     "pack": "electron-builder --dir",
-    "dist": "npm run build-frontend && electron-builder"
+    "dist": "electron-builder"
   },
   "build": {
     "appId": "com.seunome.inputoutputcontrol",

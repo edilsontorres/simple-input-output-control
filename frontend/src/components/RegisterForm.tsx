@@ -2,7 +2,6 @@ import { useState } from 'react';
 import type { Register } from '../types/Registers';
 import { insertRegister } from '../api/Registers';
 
-
 export const RegisterForm = ({ onSubmitSuccess }: { onSubmitSuccess: () => void }) => {
     const getToday = () => new Date().toISOString().split('T')[0];
     const [form, setForm] = useState<Register>({
@@ -12,29 +11,23 @@ export const RegisterForm = ({ onSubmitSuccess }: { onSubmitSuccess: () => void 
         date: getToday(),
         registerType: '',
     });
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setForm({ ...form, [name]: name === 'value' ? parseFloat(value) : value });
     };
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         await insertRegister(form);
         setForm({ name: '', description: '', value: 0, date: getToday(), registerType: '' });
         onSubmitSuccess();
     };
-
     const handleCancel = async (e: React.FormEvent) => {
         e.preventDefault();
         setForm({ name: '', description: '', value: 0, date: getToday(), registerType: '' });
-
     }
 
     return (
         <>
-
             <div className='flex items-start w-full font-patrick text-3xl font-semibold'>
                 <h2>Novo Registro</h2>
             </div>
@@ -80,11 +73,12 @@ export const RegisterForm = ({ onSubmitSuccess }: { onSubmitSuccess: () => void 
                         required
                         className="bg-white border-b border-r border-pink-300 outline-none px-1 h-12 auto"
                     />
+
                     <div className="flex gap-4 col-span-2 justify-center items-center bg-white border-b border-r border-pink-300 px-1 h-12">
                         {[
-                            { value: 'credit', color: 'blue' },
-                            { value: 'debit', color: 'red' },
-                        ].map(({ value, color }) => {
+                            { value: 'credit' },
+                            { value: 'debit' },
+                        ].map(({ value }) => {
                             const isSelected = form.registerType === value;
                             const colorMap: any = {
                                 credit: 'bg-blue-500 border-blue-500',
@@ -101,7 +95,6 @@ export const RegisterForm = ({ onSubmitSuccess }: { onSubmitSuccess: () => void 
                                         className="hidden"
                                     />
                                     <span
-                                        onClick={() => console.log('Color clicado:', color)}
                                         className={`w-5 h-5 rounded border transition-all 
                                                 ${isSelected ? colorMap[value] : 'border-gray-400'}
                                             `}
@@ -112,15 +105,6 @@ export const RegisterForm = ({ onSubmitSuccess }: { onSubmitSuccess: () => void 
                         }
                     </div>
 
-
-
-
-
-
-                    {/* <select name="registerType" value={form.registerType} onChange={handleChange}>
-                        <option value="credit">Entrada</option>
-                        <option value="debit">Saída</option>
-                    </select> */}
                     <div className='flex mt-2 p-1 font-semibold'>
                         <div className='flex pl-2 pr-2 bg-pink-300 text-pink-800 rounded mr-4'>
                             <button type="submit" className='cursor-pointer'>Adicionar</button>
@@ -131,14 +115,8 @@ export const RegisterForm = ({ onSubmitSuccess }: { onSubmitSuccess: () => void 
                         </div>
 
                     </div>
-
                 </form>
-
             </div>
-
-
-
-
         </>
     );
 };

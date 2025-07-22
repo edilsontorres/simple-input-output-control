@@ -7,16 +7,13 @@ import { exportInputsReportsPDF } from '../utils/relatorios/ExportInputsReportsP
 import { exportOutputsReportsPDF } from '../utils/relatorios/ExportOutputsReportsPDF';
 import type { Register } from '../types/Registers';
 
-
-
 export const ResumeFilterPeriod = () => {
     const [start, setStart] = useState('');
     const [end, setEnd] = useState('');
     const [totais, setTotais] = useState<Totais>({ totalInputs: 0, totalOutputs: 0, balance: 0 });
     const [registers, setRegisters] = useState<Register[]>([]);
-    const [relatorioTipo, setRelatorioTipo] = useState<'geral' | 'entradas' | 'saidas' | 'separado'>('geral');
+    const [relatorioTipo, setRelatorioTipo] = useState<'geral' | 'entradas' | 'saidas'>('geral');
     const [visibleResult, setVisibleResult] = useState(false);
-
 
     const handleSearch = async () => {
         const totalsPeriod = await caculateTotais(start, end);
@@ -27,16 +24,12 @@ export const ResumeFilterPeriod = () => {
     };
 
     useEffect(() => {
-
-        // Quando registros forem renderizados (ex: após uma pesquisa)
         if (registers.length > 0) {
-            // Aguarda o próximo frame para garantir que a DOM já renderizou tudo
             requestAnimationFrame(() => {
                 window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
             });
         }
     }, [registers]);
-
 
     const generateReport = () => {
         switch (relatorioTipo) {
@@ -55,7 +48,7 @@ export const ResumeFilterPeriod = () => {
     return (
         <div>
             <div className='flex'>
-                <div className='flex flex-col items-center font-patrick text-2xl'>
+                <div className='flex flex-col items-center font-patrick text-[18px]'>
                     <h1 className='font-semibold'>Inicio</h1>
                     <label>
                         <input
@@ -66,7 +59,7 @@ export const ResumeFilterPeriod = () => {
                         />
                     </label>
                 </div>
-                <div className='flex flex-col items-center font-patrick text-2xl'>
+                <div className='flex flex-col items-center font-patrick text-[18px]'>
                     <h1 className='font-semibold'>Fim</h1>
                     <label>
                         <input
@@ -92,7 +85,7 @@ export const ResumeFilterPeriod = () => {
                 <>
                     <h2 className="font-patrick text-3xl text-center font-semibold mb-2">Resumo</h2>
                     <p className='text-center'> {formatData(start)} à {formatData(end)}</p>
-                    <ul className="text-xl bg-pink-50 flex justify-between p-3 rounded-t-md">
+                    <ul className="text-xl bg-pink-50 flex justify-between p-3 rounded-t-md font-patrick">
                         <li className="font-semibold">
                             <span>Entradas:</span>
                             <span className="text-[#60d394]"> {formatToReal(totais.totalInputs)}</span>

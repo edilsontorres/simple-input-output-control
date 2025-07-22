@@ -31,10 +31,10 @@ export const App = () => {
   }
 
   useEffect(() => {
-  if (showFilter && filterRef.current) {
-    filterRef.current.scrollIntoView({ behavior: 'smooth' });
-  }
-}, [showFilter]);
+    if (showFilter && filterRef.current) {
+      filterRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [showFilter]);
 
   useEffect(() => {
     loadDataOfToday();
